@@ -42,6 +42,16 @@ public class SambaBrowserPlugin implements FlutterPlugin, MethodCallHandler {
       return;
     }
 
+    if (call.method.equals("saveFileLocalToRemote")) {
+      SambaFileDownloaderLocalToRemote.saveFileLocalToRemote(call, result);
+      return;
+    }
+
+    if (call.method.equals("deleteFile")) {
+      SambaDeleteRemoteFile.deleteFile(call, result);
+      return;
+    }
+
     result.notImplemented();
   }
 

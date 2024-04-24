@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -37,5 +36,38 @@ class SambaBrowser {
 
     final String filePath = await _channel.invokeMethod('saveFile', args);
     return filePath;
+  }
+
+  /// Save a file with a specified name under a given folder in a remote location.
+  /// After the upload has finished, a confirmation message will be returned.
+  /// The [domain] parameter is only required under Android.
+  static Future<String> saveFileLocalToRemote(String remoteFilePath, String fileName, String localFilePath, String domain, String username, String password) async {
+    Map<String, String> args = {
+      'remoteFilePath': remoteFilePath.endsWith('/') ? remoteFilePath : '$remoteFilePath/',
+      'fileName': fileName,
+      'localFilePath': localFilePath,
+      'domain': domain,
+      'username': username,
+      'password': password,
+    };
+
+    final String confirmationMessage = await _channel.invokeMethod('saveFileLocalToRemote', args);
+    return confirmationMessage;
+  }
+
+  /// After the upload has finished, a confirmation message will be returned.
+  /// The [domain] parameter is only required under Android.
+  static Future<String> deleteFile(String remoteFolderPath, String domain, String username, String password,
+  ) async {
+
+      Map<String, String> args = {
+        'remoteFolderPath': remoteFolderPath,
+        'domain': domain,
+        'username': username,
+        'password': password,
+      };
+      final String confirmationMessage = await _channel.invokeMethod('deleteFile', args);
+      return confirmationMessage;
+
   }
 }
