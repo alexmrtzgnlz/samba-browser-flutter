@@ -36,7 +36,14 @@ public class SambaFolderList {
                 SmbFile folder = new SmbFile(url, new NtlmPasswordAuthentication(call.argument("domain"), call.argument("username"), call.argument("password")));
                 ArrayList<String> folderList = Arrays.stream(folder.listFiles())
                         .filter(Objects::nonNull)
-                        .filter(SmbFile::isDirectory) // Filtra solo los directorios
+                        .filter(smbFile -> {
+                            try {
+                                return smbFile.isDirectory();
+                            } catch (SmbException e) {
+                                e.printStackTrace();
+                                return false;
+                            }
+                        })
                         .map(SmbFile::getName) // Obtiene el nombre de los directorios
                         .collect(Collectors.toCollection(ArrayList::new));
                 result.success(folderList);
